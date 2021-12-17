@@ -20,7 +20,7 @@ if __name__ == '__main__':
         q.put(x)
 
     with ProcessPoolExecutor(max_workers=2) as executor:
-        while True:
+        while not q.empty():
             future = executor.submit(is_even, q.get())
             future.add_done_callback(
                 lambda future: logging.info(f"Process_1: {future.result()}")
@@ -30,4 +30,3 @@ if __name__ == '__main__':
             future.add_done_callback(
                 lambda future: logging.info(f"Process_2: {future.result()}")
             )
-            q.task_done()
